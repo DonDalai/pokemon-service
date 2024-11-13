@@ -13,7 +13,7 @@ func SetupRouter() *gin.Engine {
 
 	router.GET("/pokemon/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		pokemon, err := database.GetPokemonByID(id) // Llamamos directamente al repositorio
+		pokemon, err := database.GetPokemonByID(id)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Pokémon no encontrado"})
 			return
@@ -30,14 +30,12 @@ func SetupRouter() *gin.Engine {
 			return
 		}
 
-		// Llamada directa al servicio para obtener datos de la PokeAPI
 		pokemonData, err := services.FetchPokemonData(input.PokemonID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener datos de la PokeAPI"})
 			return
 		}
 
-		// Insertamos el Pokémon directamente usando el repositorio
 		err = database.InsertPokemon(pokemonData.Name, pokemonData.Types[0].Type.Name, pokemonData.Abilities[0].Ability.Name, pokemonData.Weight, input.PokemonID)
 		if err != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": "El Pokémon ya existe"})

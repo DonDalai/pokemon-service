@@ -1,0 +1,7 @@
+# Ignorar archivos de base de datos local
+*.db
+
+# Archivos temporales y del sistema
+*.log
+*.tmp
+.DS_Store
